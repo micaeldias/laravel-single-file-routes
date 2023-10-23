@@ -1,0 +1,23 @@
+<?php
+
+namespace {{ namespace }};
+
+use {{ baseGroupFQN }};
+
+class {{ class }} extends {{ baseGroup }}
+{
+    /**
+     * {@inheritdoc}
+     */
+    public static $prefix = '{{ prefix }}';
+
+    /**
+     * {@inheritdoc}
+     */
+     public static $middleware = [];
+
+    /**
+     * {@inheritdoc}
+     */
+    public static $routes = [];
+}

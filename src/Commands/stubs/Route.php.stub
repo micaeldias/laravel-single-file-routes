@@ -1,0 +1,36 @@
+<?php
+
+namespace {{ namespace }};
+
+use Illuminate\Http\Request;
+use {{ baseRouteFQN }};
+use {{ groupFQN }};
+
+/**
+ * @uses {{ group }}
+ */
+class {{ class }} extends {{ baseRoute }}
+{
+    /**
+     * {@inheritdoc}
+     */
+    public static $method = '{{ method }}';
+
+    /**
+     * {@inheritdoc}
+     */
+    public static $uri = '{{ uri }}';
+
+    /**
+     * {@inheritdoc}
+     */
+    public static $middleware = [];
+
+    /**
+     * Handle the request.
+     */
+    public function __invoke(Request $request{{ extraArgs }})
+    {
+        // @todo handle request
+    }
+}

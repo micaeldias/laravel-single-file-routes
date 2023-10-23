@@ -1,0 +1,82 @@
+{
+    "name": "micaeldias/laravel-single-file-routes",
+    "description": "Streamlined route management for your Laravel applications.",
+    "keywords": [
+        "micaeldias",
+        "laravel",
+        "laravel-single-file-routes"
+    ],
+    "homepage": "https://github.com/micaeldias/laravel-single-file-routes",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Micael Dias",
+            "email": "me@micaeldias.dev",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": "^7.4|^8.0",
+        "haydenpierce/class-finder": "^0.5.3",
+        "illuminate/contracts": "^8.0|^9.0|^10.0",
+        "spatie/laravel-package-tools": "^1.0"
+    },
+    "require-dev": {
+        "laravel/pint": "^1.0",
+        "nunomaduro/collision": "^7.8",
+        "nunomaduro/larastan": "^2.0.1",
+        "orchestra/testbench": "^8.8",
+        "pestphp/pest": "^2.20",
+        "pestphp/pest-plugin-arch": "^2.0",
+        "pestphp/pest-plugin-laravel": "^2.0",
+        "phpstan/extension-installer": "^1.1",
+        "phpstan/phpstan-deprecation-rules": "^1.0",
+        "phpstan/phpstan-phpunit": "^1.0",
+        "spatie/laravel-ray": "^1.26"
+    },
+    "autoload": {
+        "psr-4": {
+            "MicaelDias\\SingleFileRoutes\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "MicaelDias\\SingleFileRoutes\\Tests\\": "tests/",
+            "Workbench\\App\\": "workbench/app/"
+        }
+    },
+    "scripts": {
+        "post-autoload-dump": "@composer run prepare",
+        "clear": "@php vendor/bin/testbench package:purge-laravel-single-file-routes --ansi",
+        "prepare": "@php vendor/bin/testbench package:discover --ansi",
+        "build": [
+            "@composer run prepare",
+            "@php vendor/bin/testbench workbench:build --ansi"
+        ],
+        "start": [
+            "Composer\\Config::disableProcessTimeout",
+            "@composer run build",
+            "@php vendor/bin/testbench serve"
+        ],
+        "analyse": "vendor/bin/phpstan analyse",
+        "test": "vendor/bin/pest",
+        "test-coverage": "vendor/bin/pest --coverage",
+        "format": "vendor/bin/pint"
+    },
+    "config": {
+        "sort-packages": true,
+        "allow-plugins": {
+            "pestphp/pest-plugin": true,
+            "phpstan/extension-installer": true
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "MicaelDias\\SingleFileRoutes\\LaravelSingleFileRoutesServiceProvider"
+            ]
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
