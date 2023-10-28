@@ -12,6 +12,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+
 use function Laravel\Prompts\text;
 
 class RouteGroupMakeCommand extends GeneratorCommand
@@ -49,7 +50,7 @@ class RouteGroupMakeCommand extends GeneratorCommand
      */
     protected function getStub(): string
     {
-        return __DIR__ . '/stubs/RouteGroup.php.stub';
+        return __DIR__.'/stubs/RouteGroup.php.stub';
     }
 
     /**
@@ -131,7 +132,7 @@ class RouteGroupMakeCommand extends GeneratorCommand
             );
         }
 
-        $name = ucfirst($name) . 'RouteGroup';
+        $name = ucfirst($name).'RouteGroup';
 
         $input->setArgument('name', $name);
     }
@@ -141,7 +142,7 @@ class RouteGroupMakeCommand extends GeneratorCommand
         if (is_null($input->getArgument('namespace'))) {
             $name = Str::replace('RouteGroup', '', $input->getArgument('name'));
 
-            $default = config('single-file-routes.routes-namespace') . "\\" . $name;
+            $default = config('single-file-routes.routes-namespace').'\\'.$name;
 
             $input->setArgument('namespace', text(
                 'Where should this route group be placed?',
@@ -190,8 +191,8 @@ class RouteGroupMakeCommand extends GeneratorCommand
 
             return $found;
         } catch (\Exception $e) {
-            $this->components->error("SingleFileRoutesServiceProvider could not be determined.\n" .
-                "Did you run php artisan single-file-routes:install?");
+            $this->components->error("SingleFileRoutesServiceProvider could not be determined.\n".
+                'Did you run php artisan single-file-routes:install?');
 
             return false;
         }
@@ -201,14 +202,14 @@ class RouteGroupMakeCommand extends GeneratorCommand
     {
         $path = $this->getServiceProviderPath();
         $search = 'protected $groups = [';
-        $class = $this->argument('namespace') . '\\' .  $this->argument('name');
+        $class = $this->argument('namespace').'\\'.$this->argument('name');
         $contents = file_get_contents($path);
 
-        $suffix = Str::contains($contents, 'protected $groups = []') ? "    " : "";
+        $suffix = Str::contains($contents, 'protected $groups = []') ? '    ' : '';
 
         file_put_contents($path, str_replace(
             $search,
-            $search . PHP_EOL . "        \\" . "{$class}::class," . PHP_EOL . $suffix,
+            $search.PHP_EOL.'        \\'."{$class}::class,".PHP_EOL.$suffix,
             $contents
         ));
     }

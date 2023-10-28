@@ -3,8 +3,8 @@
 namespace MicaelDias\SingleFileRoutes;
 
 use MicaelDias\SingleFileRoutes\Commands\InstallCommand;
-use MicaelDias\SingleFileRoutes\Commands\RouteMakeCommand;
 use MicaelDias\SingleFileRoutes\Commands\RouteGroupMakeCommand;
+use MicaelDias\SingleFileRoutes\Commands\RouteMakeCommand;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 

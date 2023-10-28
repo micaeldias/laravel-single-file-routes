@@ -3,6 +3,7 @@
 namespace MicaelDias\SingleFileRoutes\Routing;
 
 use HaydenPierce\ClassFinder\ClassFinder;
+
 use function config;
 
 abstract class RouteGroup
@@ -24,6 +25,7 @@ abstract class RouteGroup
 
     /**
      * The routes belonging to this group.
+     *
      * @throws \Exception
      */
     public static function routes(): array

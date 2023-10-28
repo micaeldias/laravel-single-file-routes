@@ -12,6 +12,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+
 use function Laravel\Prompts\select;
 use function Laravel\Prompts\text;
 
@@ -91,8 +92,8 @@ class RouteMakeCommand extends GeneratorCommand
 
             if (empty($groups)) {
                 throw new \Exception(
-                    "You need to have at least one route group before creating " .
-                    "routes. Did you run php artisan make:route-group?"
+                    'You need to have at least one route group before creating '.
+                    'routes. Did you run php artisan make:route-group?'
                 );
             }
 
@@ -103,7 +104,7 @@ class RouteMakeCommand extends GeneratorCommand
         }
 
         if (! is_subclass_of($group, RouteGroup::class)) {
-            throw new \Exception("Invalid route group provided.");
+            throw new \Exception('Invalid route group provided.');
         }
 
         $input->setArgument('route-group', $group);
@@ -138,7 +139,7 @@ class RouteMakeCommand extends GeneratorCommand
                 '',
                 true,
                 null,
-                $prefix ? "The route group's prefix is included ({$prefix})" : ""
+                $prefix ? "The route group's prefix is included ({$prefix})" : ''
             );
         }
 
@@ -159,7 +160,7 @@ class RouteMakeCommand extends GeneratorCommand
 
             $uriToNamespace = collect(explode('/', $input->getArgument('uri')))
                 ->filter(function ($part) {
-                    return !Str::startsWith($part, '{') && !Str::endsWith($part,'}');
+                    return ! Str::startsWith($part, '{') && ! Str::endsWith($part, '}');
                 })
                 ->map(function ($part) {
                     if (Str::contains($part, '-')) {
@@ -174,7 +175,7 @@ class RouteMakeCommand extends GeneratorCommand
                 })
                 ->implode('\\');
 
-            $namespace = $groupReflection->getNamespaceName() . $uriToNamespace;
+            $namespace = $groupReflection->getNamespaceName().$uriToNamespace;
         }
 
         $input->setArgument('namespace', $namespace);
@@ -187,20 +188,20 @@ class RouteMakeCommand extends GeneratorCommand
      */
     protected function determineName(InputInterface &$input): void
     {
-        $namespace = $this->getNamespaceForName($input) . "\\";
+        $namespace = $this->getNamespaceForName($input).'\\';
         $name = $input->getArgument('name');
 
         if (is_null($name)) {
             $name = text(
-                "Where should this route be placed?",
+                'Where should this route be placed?',
                 '',
                 $namespace,
                 true,
                 null,
-                "E.g. Index, Get, SignIn, etc"
+                'E.g. Index, Get, SignIn, etc'
             );
         } else {
-            $name = $namespace . Str::ucfirst($name);
+            $name = $namespace.Str::ucfirst($name);
         }
 
         $input->setArgument('name', $name);
@@ -210,11 +211,11 @@ class RouteMakeCommand extends GeneratorCommand
     {
         /** @var RouteGroup|string $group */
         $group = $input->getArgument('route-group');
-        $fullUri = $group::$prefix . $input->getArgument('uri');
+        $fullUri = $group::$prefix.$input->getArgument('uri');
 
         $this->extraArgs = Str::matchAll("/({\w+})/", $fullUri)
-            ->map(function($arg) {
-                return "$" . Str::replace(['{', '}'], '', $arg);
+            ->map(function ($arg) {
+                return '$'.Str::replace(['{', '}'], '', $arg);
             })
             ->toArray();
     }
@@ -241,7 +242,7 @@ class RouteMakeCommand extends GeneratorCommand
      */
     protected function getStub(): string
     {
-        return __DIR__ . '/stubs/Route.php.stub';
+        return __DIR__.'/stubs/Route.php.stub';
     }
 
     /**
@@ -262,7 +263,7 @@ class RouteMakeCommand extends GeneratorCommand
         $stub = str_replace('{{ uri }}', $this->argument('uri'), $stub);
         $stub = str_replace(
             '{{ extraArgs }}',
-            empty($this->extraArgs) ? '' : ', ' . implode(', ', $this->extraArgs),
+            empty($this->extraArgs) ? '' : ', '.implode(', ', $this->extraArgs),
             $stub
         );
 
@@ -286,11 +287,11 @@ class RouteMakeCommand extends GeneratorCommand
         $path = $groupReflection->getFileName();
         $contents = file_get_contents($path);
         $search = 'public static $routes = [';
-        $suffix = Str::contains($contents, 'public static $routes = []') ? "    " : "";
+        $suffix = Str::contains($contents, 'public static $routes = []') ? '    ' : '';
 
         file_put_contents($path, str_replace(
             $search,
-            $search . PHP_EOL . "        \\"."{$class}::class," . PHP_EOL . $suffix,
+            $search.PHP_EOL.'        \\'."{$class}::class,".PHP_EOL.$suffix,
             $contents
         ));
     }

@@ -15,7 +15,7 @@ return [
     |
     */
 
-    'routes-namespace' => "App\\Http\\Routes",
+    'routes-namespace' => 'App\\Http\\Routes',
 
     /*
     |--------------------------------------------------------------------------

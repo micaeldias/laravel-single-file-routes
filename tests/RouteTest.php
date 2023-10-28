@@ -1,6 +1,7 @@
 <?php
 
 use Workbench\App\Http\Api\User\Get;
+
 use function Pest\Laravel\get;
 
 it('registers the Get User route', function () {

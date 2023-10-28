@@ -11,6 +11,6 @@ class WorkbenchServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        $this->mergeConfigFrom(__DIR__ . '/../../../config/single-file-routes.php', 'single-file-routes');
+        $this->mergeConfigFrom(__DIR__.'/../../../config/single-file-routes.php', 'single-file-routes');
     }
 }

@@ -44,7 +44,7 @@ class InstallCommand extends Command
         $namespace = Str::replaceLast('\\', '', $this->laravel->getNamespace());
 
         file_put_contents($configPath, str_replace(
-            "namespace App\\Http\\Routes;",
+            'namespace App\\Http\\Routes;',
             "namespace {$namespace}\\Http\\Routes;",
             file_get_contents($configPath)
         ));
