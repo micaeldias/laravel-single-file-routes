@@ -1,0 +1,14 @@
+<?php
+
+namespace App\Providers;
+
+use MicaelDias\SingleFileRoutes\Routing\RouteGroup;
+use MicaelDias\SingleFileRoutes\Routing\RouteServiceProvider;
+
+class SingleFileRoutesServiceProvider extends RouteServiceProvider
+{
+    /**
+     * @var RouteGroup[]|string[]
+     */
+    protected $groups = [];
+}

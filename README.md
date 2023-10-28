@@ -1,75 +1,79 @@
-# :package_description
+# File system routes for Laravel
 
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/:vendor_slug/:package_slug.svg?style=flat-square)](https://packagist.org/packages/:vendor_slug/:package_slug)
-[![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/:vendor_slug/:package_slug/run-tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/:vendor_slug/:package_slug/actions?query=workflow%3Arun-tests+branch%3Amain)
-[![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/:vendor_slug/:package_slug/fix-php-code-style-issues.yml?branch=main&label=code%20style&style=flat-square)](https://github.com/:vendor_slug/:package_slug/actions?query=workflow%3A"Fix+PHP+code+style+issues"+branch%3Amain)
-[![Total Downloads](https://img.shields.io/packagist/dt/:vendor_slug/:package_slug.svg?style=flat-square)](https://packagist.org/packages/:vendor_slug/:package_slug)
-<!--delete-->
----
-This repo can be used to scaffold a Laravel package. Follow these steps to get started:
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/micaeldias/laravel-single-file-routes.svg?style=flat-square)](https://packagist.org/packages/micaeldias/laravel-single-file-routes)
+[![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/micaeldias/laravel-single-file-routes/run-tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/micaeldias/laravel-single-file-routes/actions?query=workflow%3Arun-tests+branch%3Amain)
+[![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/micaeldias/laravel-single-file-routes/fix-php-code-style-issues.yml?branch=main&label=code%20style&style=flat-square)](https://github.com/micaeldias/laravel-single-file-routes/actions?query=workflow%3A"Fix+PHP+code+style+issues"+branch%3Amain)
+[![Total Downloads](https://img.shields.io/packagist/dt/micaeldias/laravel-single-file-routes.svg?style=flat-square)](https://packagist.org/packages/micaeldias/laravel-single-file-routes)
 
-1. Press the "Use this template" button at the top of this repo to create a new repo with the contents of this skeleton.
-2. Run "php ./configure.php" to run a script that will replace all placeholders throughout all the files.
-3. Have fun creating your package.
-4. If you need help creating a package, consider picking up our <a href="https://laravelpackage.training">Laravel Package Training</a> video course.
----
-<!--/delete-->
-This is where your description should go. Limit it to a paragraph or two. Consider adding a small example.
+Single file routes allows you to co-locate everything about a route into a single file. See the route method, URI, middleware and behaviour at a glance without the need to keep track of multiple files. 
 
-## Support us
+```php
+namespace App\Http\Routes\Api\User;
 
-[<img src="https://github-ads.s3.eu-central-1.amazonaws.com/:package_name.jpg?t=1" width="419px" />](https://spatie.be/github-ad-click/:package_name)
+use Illuminate\Http\Request;
+use App\Http\Routes\Api\ApiRouteGroup;
+use MicaelDias\SingleFileRoutes\Routing\Route;
 
-We invest a lot of resources into creating [best in class open source packages](https://spatie.be/open-source). You can support us by [buying one of our paid products](https://spatie.be/open-source/support-us).
+/**
+ * @uses ApiRouteGroup
+ */
+class Get extends Route
+{
+    public static $method = 'GET';
 
-We highly appreciate you sending us a postcard from your hometown, mentioning which of our package(s) you are using. You'll find our address on [our contact page](https://spatie.be/about-us). We publish all received postcards on [our virtual postcard wall](https://spatie.be/open-source/postcards).
+    public static $uri = '/user/{id}';
+
+    public static $middleware = [];
+
+    /**
+     * Handle the request.
+     */
+    public function __invoke(Request $request, int $id)
+    {
+        // return view('user', ['id' => $id]);
+        // return new JsonResponse(['id' => $id]);
+        // or any other response supported by Laravel.
+    }
+}
+```
 
 ## Installation
 
-You can install the package via composer:
+You may install single file routes into your project with:
+```bash
+composer require micaeldias/laravel-single-file-routes
+```
+
+After installing, publish the assets using the `single-file-routes:install` Artisan command:
 
 ```bash
-composer require :vendor_slug/:package_slug
+php artisan single-file-routes:install
 ```
 
-You can publish and run the migrations with:
+## Configuration
 
-```bash
-php artisan vendor:publish --tag=":package_slug-migrations"
-php artisan migrate
-```
-
-You can publish the config file with:
-
-```bash
-php artisan vendor:publish --tag=":package_slug-config"
-```
-
-This is the contents of the published config file:
-
-```php
-return [
-];
-```
-
-Optionally, you can publish the views using
-
-```bash
-php artisan vendor:publish --tag=":package_slug-views"
-```
+After publishing single file routes' assets, its primary configuration file will be located at `config/single-file-routes.php`. Each configuration option includes a description of its purpose, so be sure to thoroughly explore this file.
 
 ## Usage
 
-```php
-$variable = new VendorName\Skeleton();
-echo $variable->echoPhrase('Hello, VendorName!');
-```
-
-## Testing
+### Route Groups
+To get started you need to create at least one route group, you can have a single one for all your routes or multiple ones such as web/api, there are no limitations on how you structure your app.
 
 ```bash
-composer test
+php artisan make:route-group
 ```
+
+[demo make:route-group](assets/make-route-group.gif)
+
+### Routes
+
+Once you have at least one route group you can start creating routes, by default the route will be namespaced according to the URI, so `/api/user` would be stored under the `App\Http\Routes\Api\User` namespace. This is customisable when running the command.
+
+```bash
+php artisan make:route
+```
+
+[demo make:route](assets/make-route.gif)
 
 ## Changelog
 
@@ -85,7 +89,7 @@ Please review [our security policy](../../security/policy) on how to report secu
 
 ## Credits
 
-- [:author_name](https://github.com/:author_username)
+- [Micael Dias](https://github.com/micaeldias)
 - [All Contributors](../../contributors)
 
 ## License

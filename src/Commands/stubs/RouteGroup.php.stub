@@ -1,0 +1,23 @@
+<?php
+
+namespace {{ namespace }};
+
+use MicaelDias\SingleFileRoutes\Routing\RouteGroup;
+
+class {{ class }} extends RouteGroup
+{
+    /**
+     * {@inheritdoc}
+     */
+    public static $prefix = '{{ prefix }}';
+
+    /**
+     * {@inheritdoc}
+     */
+     public static $middleware = [];
+
+    /**
+     * {@inheritdoc}
+     */
+    public static $routes = [];
+}

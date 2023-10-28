@@ -2,7 +2,6 @@
 
 namespace Workbench\App\Providers;
 
-use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 
 class WorkbenchServiceProvider extends ServiceProvider
@@ -12,14 +11,6 @@ class WorkbenchServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
-    }
-
-    /**
-     * Bootstrap services.
-     */
-    public function boot(): void
-    {
-        Route::view('/', 'welcome');
+        $this->mergeConfigFrom(__DIR__ . '/../../../config/single-file-routes.php', 'single-file-routes');
     }
 }
