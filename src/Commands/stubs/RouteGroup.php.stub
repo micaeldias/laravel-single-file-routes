@@ -9,15 +9,15 @@ class {{ class }} extends {{ baseGroup }}
     /**
      * {@inheritdoc}
      */
-    public static $prefix = '{{ prefix }}';
+    public static string $prefix = '{{ prefix }}';
 
     /**
      * {@inheritdoc}
      */
-     public static $middleware = [];
+     public static array $middleware = [];
 
     /**
      * {@inheritdoc}
      */
-    public static $routes = [];
+    public static array $routes = [];
 }

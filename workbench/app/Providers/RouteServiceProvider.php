@@ -10,7 +10,7 @@ class RouteServiceProvider extends SingleFileRoutesServiceProvider
     /**
      * @var RouteGroup[]|string[]
      */
-    protected $groups = [
+    protected array $groups = [
         \Workbench\App\Http\Api\ApiRouteGroup::class,
     ];
 }

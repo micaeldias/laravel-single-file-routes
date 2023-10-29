@@ -14,17 +14,17 @@ class {{ class }} extends {{ baseRoute }}
     /**
      * {@inheritdoc}
      */
-    public static $method = '{{ method }}';
+    public static string $method = '{{ method }}';
 
     /**
      * {@inheritdoc}
      */
-    public static $uri = '{{ uri }}';
+    public static string $uri = '{{ uri }}';
 
     /**
      * {@inheritdoc}
      */
-    public static $middleware = [];
+    public static array $middleware = [];
 
     /**
      * Handle the request.

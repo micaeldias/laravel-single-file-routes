@@ -40,7 +40,7 @@ class RouteGroupMakeCommand extends GeneratorCommand
     {
         $this->decorateOptions();
 
-        if (! parent::handle()) {
+        if (parent::handle() === false) {
             return false;
         }
 
@@ -189,7 +189,7 @@ class RouteGroupMakeCommand extends GeneratorCommand
     protected function registerGroupToServiceProvider(): void
     {
         $path = $this->getServiceProviderPath();
-        $search = 'protected $groups = [';
+        $search = 'protected array $groups = [';
         $class = $this->option('namespace').'\\'.$this->option('name');
         $contents = file_get_contents($path);
 
@@ -197,7 +197,7 @@ class RouteGroupMakeCommand extends GeneratorCommand
             return;
         }
 
-        $suffix = Str::contains($contents, 'protected $groups = []') ? PHP_EOL.'    ' : '';
+        $suffix = Str::contains($contents, 'protected array $groups = []') ? PHP_EOL.'    ' : '';
 
         file_put_contents($path, str_replace(
             $search,

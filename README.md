@@ -19,11 +19,11 @@ use MicaelDias\SingleFileRoutes\Routing\Route;
  */
 class Get extends Route
 {
-    public static $method = 'GET';
+    public static string $method = 'GET';
 
-    public static $uri = '/user/{id}';
+    public static string $uri = '/user/{id}';
 
-    public static $middleware = [];
+    public static array $middleware = [];
 
     /**
      * Handle the request.
@@ -41,7 +41,8 @@ class Get extends Route
 
 | Laravel version | PHP version | Package version |
 | ----- | ----- | ----- |
-| 8 - 10 | 7.4 - 8.2 | 1 |
+| 8 | 7.4 - 8.1 | 1 |
+| 9 - 10 | 8.0 - 8.2 | 2 |
 
 ## Installation
 
@@ -93,10 +94,10 @@ route(UserGet::class) # http://localhost/api/user
 
 ### Adding middleware
 
-You can use any middleware supported by Laravel directly in the route or the route group. As expected, middleware added the route group applies to all routes belonging to it.
+You can use any middleware supported by Laravel directly in the route or the route group. As expected, middleware added to the route group applies to all routes belonging to it.
 
 ```php
-public static $middleware = [
+public static array $middleware = [
     Authenticate::class,
     'throttle:30,1',
 ];
@@ -106,7 +107,9 @@ public static $middleware = [
 
 If you want to customise how routes are organised you're free to do so. For example, let's say you want to add routes to an application using a domain driven design structure.
 
-You'd first need to create a route group in a namespace that makes sense for your project. Let's use `App\Http`:
+You'd first need to create a route group in a namespace that makes sense for your project. 
+
+Let's use `App\Http`:
 
 ```bash
 php artisan make:route-group --name Web --namespace=App\\Http --no-interaction
@@ -124,11 +127,11 @@ There's really no limitations on how you choose to structure your application.
 
 ### Changing the base Route
 
-By default, all generated routes extend `MicaelDias\SingleFileRoutes\Routing\Route` which include both `AuthorizesRequests` and ` ValidatesRequests` traits from Laravel. If you prefer, you can have all your routes extend a custom class to add functionality that's available on all your routes. 
+By default, all generated routes extend `MicaelDias\SingleFileRoutes\Routing\Route` which include both `AuthorizesRequests` and `ValidatesRequests` traits from Laravel. If you prefer, you can have all your routes extend a custom class to add functionality that's available on all your routes. 
 
 To do so, update the 'route-class' value found on `config/single-file-routes.php`. 
 
-Finally, the route generators were created for your convenience, but you're of course free to manually create routes or groups if it's simpler for your use-case.
+Keep in mind that the route generators were created for your convenience, but you're of course free to manually create routes or groups if it's simpler for your use-case.
 
 ## Changelog
 

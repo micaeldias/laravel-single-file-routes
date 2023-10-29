@@ -6,11 +6,11 @@ use MicaelDias\SingleFileRoutes\Routing\RouteGroup;
 
 class ApiRouteGroup extends RouteGroup
 {
-    public static $prefix = '/api';
+    public static string $prefix = '/api';
 
-    public static $middleware = [];
+    public static array $middleware = [];
 
-    public static $routes = [
+    public static array $routes = [
         \Workbench\App\Http\Api\User\Get::class,
     ];
 }

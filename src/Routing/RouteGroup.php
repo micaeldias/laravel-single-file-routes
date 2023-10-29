@@ -7,15 +7,19 @@ abstract class RouteGroup
     /**
      * The URI prefix for all routes on this group.
      */
-    public static $prefix = '';
+    public static string $prefix = '';
 
     /**
      * The middleware used for all routes on this group.
+     *
+     *  @var string[]
      */
-    public static $middleware = [];
+    public static array $middleware = [];
 
     /**
      * The routes belonging to this group.
+     *
+     *  @var Route[]|string[]
      */
-    public static $routes = [];
+    public static array $routes = [];
 }

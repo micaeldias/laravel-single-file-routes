@@ -11,17 +11,17 @@ class Get extends Route
     /**
      * {@inheritdoc}
      */
-    public static $method = 'GET';
+    public static string $method = 'GET';
 
     /**
      * {@inheritdoc}
      */
-    public static $uri = '/user/{id}';
+    public static string $uri = '/user/{id}';
 
     /**
      * {@inheritdoc}
      */
-    public static $middleware = [];
+    public static array $middleware = [];
 
     /**
      * Handle the request.

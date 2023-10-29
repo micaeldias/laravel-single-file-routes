@@ -11,22 +11,18 @@ abstract class Route
 
     /**
      * The HTTP method of the request.
-     *
-     * @var string
      */
-    public static $method;
+    public static string $method;
 
     /**
      * The URI of the request.
-     *
-     *  @var string
      */
-    public static $uri;
+    public static string $uri;
 
     /**
      * Add middleware to the request.
      *
      *  @var string[]
      */
-    public static $middleware = [];
+    public static array $middleware = [];
 }

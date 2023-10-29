@@ -16,9 +16,9 @@
         }
     ],
     "require": {
-        "php": "^7.4|^8.0",
+        "php": "^8.0",
         "haydenpierce/class-finder": "^0.5.3",
-        "illuminate/contracts": "^8.0|^9.0|^10.0",
+        "illuminate/contracts": "^9.0|^10.0",
         "spatie/laravel-package-tools": "^1.0"
     },
     "require-dev": {

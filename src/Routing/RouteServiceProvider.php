@@ -10,7 +10,7 @@ class RouteServiceProvider extends ServiceProvider
     /**
      * @var RouteGroup[]|string[]
      */
-    protected $groups = [];
+    protected array $groups = [];
 
     /**
      * Boot the service.

@@ -52,7 +52,7 @@ class RouteMakeCommand extends GeneratorCommand
             return false;
         }
 
-        if (! parent::handle()) {
+        if (parent::handle() === false) {
             return false;
         }
 
@@ -303,8 +303,8 @@ class RouteMakeCommand extends GeneratorCommand
 
         $path = $groupReflection->getFileName();
         $contents = file_get_contents($path);
-        $search = 'public static $routes = [';
-        $suffix = Str::contains($contents, 'public static $routes = []') ? '    '.PHP_EOL : '';
+        $search = 'public static array $routes = [';
+        $suffix = Str::contains($contents, 'public static array $routes = []') ? PHP_EOL.'    ' : '';
 
         if (Str::contains($contents, "{$class}::class")) {
             return;
