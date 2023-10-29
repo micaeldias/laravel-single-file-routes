@@ -1,8 +1,8 @@
 # Single file routes for Laravel
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/micaeldias/laravel-single-file-routes.svg?style=flat-square)](https://packagist.org/packages/micaeldias/laravel-single-file-routes)
-[![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/micaeldias/laravel-single-file-routes/run-tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/micaeldias/laravel-single-file-routes/actions?query=workflow%3Arun-tests+branch%3Amain)
-[![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/micaeldias/laravel-single-file-routes/fix-php-code-style-issues.yml?branch=main&label=code%20style&style=flat-square)](https://github.com/micaeldias/laravel-single-file-routes/actions?query=workflow%3A"Fix+PHP+code+style+issues"+branch%3Amain)
+[![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/micaeldias/laravel-single-file-routes/run-tests.yml?branch=v1&label=tests&style=flat-square)](https://github.com/micaeldias/laravel-single-file-routes/actions?query=workflow%3Arun-tests+branch%3Av1)
+[![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/micaeldias/laravel-single-file-routes/fix-php-code-style-issues.yml?branch=v1&label=code%20style&style=flat-square)](https://github.com/micaeldias/laravel-single-file-routes/actions?query=workflow%3A"Fix+PHP+code+style+issues"+branch%3Av1)
 [![Total Downloads](https://img.shields.io/packagist/dt/micaeldias/laravel-single-file-routes.svg?style=flat-square)](https://packagist.org/packages/micaeldias/laravel-single-file-routes)
 
 Single file routes allows you to co-locate everything about a route into a single file. See the route method, URI, middleware and it's behaviour at a glance without the need to keep track of multiple files. 
