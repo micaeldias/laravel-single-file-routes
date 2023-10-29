@@ -41,7 +41,8 @@ class Get extends Route
 
 | Laravel version | PHP version | Package version |
 | ----- | ----- | ----- |
-| 8 - 10 | 7.4 - 8.2 | 1 |
+| 8 | 7.4 - 8.1 | 1 |
+| 9 - 10 | 8.0 - 8.2 | 2 |
 
 ## Installation
 
