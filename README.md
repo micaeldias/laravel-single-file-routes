@@ -5,7 +5,7 @@
 [![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/micaeldias/laravel-single-file-routes/fix-php-code-style-issues.yml?branch=main&label=code%20style&style=flat-square)](https://github.com/micaeldias/laravel-single-file-routes/actions?query=workflow%3A"Fix+PHP+code+style+issues"+branch%3Amain)
 [![Total Downloads](https://img.shields.io/packagist/dt/micaeldias/laravel-single-file-routes.svg?style=flat-square)](https://packagist.org/packages/micaeldias/laravel-single-file-routes)
 
-Single file routes allows you to co-locate everything about a route into a single file. See the route method, URI, middleware and it's behaviour at a glance without the need to keep track of multiple files. 
+Single file routes allows you to co-locate everything about a route into a single file. See the route method, URI, middleware, and it's behaviour at a glance without the need to keep track of multiple files. 
 
 ```php
 namespace App\Http\Routes\Api\User;
@@ -29,6 +29,8 @@ class Get
 }
 ```
 
+You can still register routes like you're used to in conjunction with this package, this is not an all-in package.
+
 ## Compatibility
 
 | Laravel version | PHP version | Package version |
@@ -50,9 +52,7 @@ After installing, publish the assets using the `single-file-routes:install` Arti
 php artisan single-file-routes:install
 ```
 
-## Configuration
-
-After publishing single file routes' assets, its primary configuration file will be located at `config/single-file-routes.php`. Each configuration option includes a description of its purpose, so be sure to thoroughly explore this file.
+After publishing single file routes' assets, its primary configuration file will be located at `config/single-file-routes.php`. 
 
 ## Usage
 
@@ -183,7 +183,9 @@ This will make `/user` and `/users` have the same behaviour.
 
 ### Route Caching
 
-Laravel's route caching is fully supported so you can keep using `php artisan route:cache` as you were.
+Laravel's route caching is fully supported.
+
+In fact, due to how routes are discovered, it's highly recommended that you do [cache your routes](https://laravel.com/docs/master/routing#route-caching) in production.
 
 ## Artisan Commands
 
@@ -192,7 +194,7 @@ Laravel's route caching is fully supported so you can keep using `php artisan ro
 You can easily create a route group using the `make:route-group` Artisan command:
 
 ```bash
-php artisan make:route-group {name} {prefix}
+php artisan make:route-group {name} {?prefix}
 ```
 
 Let's say we want to create an API route group:
