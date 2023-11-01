@@ -62,8 +62,7 @@ class RouteServiceProvider extends ServiceProvider
         ReflectionAttribute $routeAttribute,
         $action,
         string $name = null
-    ): void
-    {
+    ): void {
         /** @var Route $route */
         $route = $routeAttribute->newInstance();
 

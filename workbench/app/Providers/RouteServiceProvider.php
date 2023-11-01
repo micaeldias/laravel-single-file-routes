@@ -8,6 +8,6 @@ class RouteServiceProvider extends SingleFileRoutesServiceProvider
 {
     public function getAppNamespace(): string
     {
-        return "Workbench\\App";
+        return 'Workbench\\App';
     }
 }

@@ -1,6 +1,5 @@
 <?php
 
-use Workbench\App\Http\Api\TeamController;
 use Workbench\App\Http\Api\User\Get;
 
 use function Pest\Laravel\get;
@@ -25,6 +24,6 @@ it('registers the controller method route', function () use ($teamsRoute) {
 
 it('calls the controller method route', function () use ($teamsRoute) {
     get(route($teamsRoute))->assertExactJson([
-        'teams' => [1, 2, 3]
+        'teams' => [1, 2, 3],
     ]);
 });

@@ -7,7 +7,6 @@ use Illuminate\Console\Concerns\CreatesMatchingTest;
 use Illuminate\Console\GeneratorCommand;
 use Illuminate\Support\Str;
 use MicaelDias\SingleFileRoutes\Routing\RouteGroup;
-use ReflectionClass;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -169,7 +168,7 @@ class RouteMakeCommand extends GeneratorCommand
         $group = $input->getOption('group');
 
         if ($group) {
-            $fullUri = $group::prefix() . Str::start($input->getOption('uri'), '/');
+            $fullUri = $group::prefix().Str::start($input->getOption('uri'), '/');
         } else {
             $fullUri = $input->getOption('uri');
         }
@@ -193,7 +192,7 @@ class RouteMakeCommand extends GeneratorCommand
             })
             ->implode('\\');
 
-        $input->setOption('namespace', $routesNamespace . "\\" . $uriToNamespace);
+        $input->setOption('namespace', $routesNamespace.'\\'.$uriToNamespace);
     }
 
     protected function determineName(InputInterface &$input): void
@@ -287,11 +286,11 @@ class RouteMakeCommand extends GeneratorCommand
 
             $fullUri = $groupFQN::prefix().$uri;
             $groupFQN = "\nuse {$groupFQN};";
-            $group =  ", group: {$group}::class";
+            $group = ", group: {$group}::class";
         } else {
             $fullUri = $uri;
-            $groupFQN = "";
-            $group = "";
+            $groupFQN = '';
+            $group = '';
         }
 
         $extraArgs = Str::matchAll("/({\w+})/", $fullUri)

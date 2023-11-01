@@ -13,8 +13,7 @@ class Route
         public ?string $name = null,
         public ?string $group = null,
         public array $middleware = []
-    )
-    {
+    ) {
 
     }
 }

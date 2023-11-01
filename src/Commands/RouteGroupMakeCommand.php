@@ -84,7 +84,7 @@ class RouteGroupMakeCommand extends GeneratorCommand
     {
         return [
             ['name', InputArgument::REQUIRED, 'The name of the route group'],
-            ['prefix', InputArgument::OPTIONAL, 'The prefix for the route group']
+            ['prefix', InputArgument::OPTIONAL, 'The prefix for the route group'],
         ];
     }
 

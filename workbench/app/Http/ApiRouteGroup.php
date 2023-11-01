@@ -11,7 +11,7 @@ class ApiRouteGroup implements RouteGroup
      */
     public static function prefix(): string
     {
-        return "/api";
+        return '/api';
     }
 
     /**
