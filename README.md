@@ -10,21 +10,13 @@ Single file routes allows you to co-locate everything about a route into a singl
 ```php
 namespace App\Http\Routes\Api\User;
 
+use App\Http\ApiRouteGroup;
 use Illuminate\Http\Request;
-use App\Http\Routes\Api\ApiRouteGroup;
 use MicaelDias\SingleFileRoutes\Routing\Route;
 
-/**
- * @uses ApiRouteGroup
- */
-class Get extends Route
+#[Route(method: 'GET', uri: '/user/{id}', group: ApiRouteGroup::class)]
+class Get
 {
-    public static string $method = 'GET';
-
-    public static string $uri = '/user/{id}';
-
-    public static array $middleware = [];
-
     /**
      * Handle the request.
      */
@@ -43,6 +35,7 @@ class Get extends Route
 | ----- | ----- | ----- |
 | 8 | 7.4 - 8.1 | 1 |
 | 9 - 10 | 8.0 - 8.2 | 2 |
+| 9 - 10 | 8.0 - 8.2 | 3 |
 
 ## Installation
 
@@ -63,28 +56,72 @@ After publishing single file routes' assets, its primary configuration file will
 
 ## Usage
 
+### Single Action Controllers
+
+To register a route in a single action controller, simply add the `Route` attribute to the class itself:
+
+```php
+#[Route(method: 'GET', uri: '/user/{id}')]
+class Get {
+    __invoke (Request $request, int $id) {
+        // Handle the request
+    }
+}
+```
+
+### Basic Controllers
+
+To register a route in a basic controller, you need to the `Route` attribute to the method instead:
+
+```php
+class UserController 
+{
+    #[Route(method: 'GET', uri: '/user/{id}')]
+    public function show(int $id): View
+    {
+        return view('user.profile', [
+            'user' => User::findOrFail($id)
+        ]);
+    }
+}
+```
+
 ### Route Groups
-To get started you need to create at least one route group, you can have a single one for all your routes or multiple ones such as web/api, there are no limitations on how you structure your app.
 
-```bash
-php artisan make:route-group
+To use a route group, you first need to create one. This is easily done using the artisan command `make:route-group` explained below.
+
+The route group extends the following interface:
+```php
+interface RouteGroup
+{
+    /**
+     * The URI prefix for all routes on this group.
+     */
+    public static function prefix(): string;
+
+    /**
+     * The middleware used for all routes on this group.
+     */
+    public static function middleware(): array;
+
+    /**
+     * Assign this route group to a subdomain.
+     */
+    public static function domain(): ?string;
+}
 ```
 
-![](assets/make-route-group.gif)
+Once you've created your desired route group, you can start adding routes under it. Let's say we create an `ApiRouteGroup`, to use it on a route we can simply pass the `group` param on the `Route` attribute, as such:
 
-### Routes
-
-Once you have at least one route group you can start creating routes, by default the route will be namespaced according to the URI, so `/api/user` would be stored under the `App\Http\Routes\Api\User` namespace. This is customisable when running the command.
-
-```bash
-php artisan make:route
+```php
+#[Route(method: 'GET', uri: '/user/{id}', group: ApiRouteGroup::class)]
 ```
-
-![](assets/make-route.gif)
 
 ### Route names
 
-The routes' names are the same as their definition meaning you can simply pass the class name in Laravel's `route` method to get the URL.
+By default, routes' names are the same as their definition meaning you can simply pass the class name in Laravel's `route` method to get the URL.
+
+#### Single Action Controllers
 
 ```php
 use App\Http\Routes\Api\User\Get as UserGet;
@@ -92,44 +129,147 @@ use App\Http\Routes\Api\User\Get as UserGet;
 route(UserGet::class) # http://localhost/api/user
 ```
 
-### Adding middleware
-
-You can use any middleware supported by Laravel directly in the route or the route group. As expected, middleware added to the route group applies to all routes belonging to it.
+#### Basic Controllers
 
 ```php
-public static array $middleware = [
-    Authenticate::class,
-    'throttle:30,1',
-];
+route('App\Http\Controllers\UserController::index()')
 ```
 
-### Using a different structure
+#### Custom Route Names
 
-If you want to customise how routes are organised you're free to do so. For example, let's say you want to add routes to an application using a domain driven design structure.
+If you don't like having the route name the same as it's definition you can pass the `name` param on the `Route` attribute:
 
-You'd first need to create a route group in a namespace that makes sense for your project. 
+```php
+#[Route(method: 'GET', uri: '/user/{id}', name: 'users.show')]
+```
 
-Let's use `App\Http`:
+### Adding middleware
+
+You can use any middleware supported by Laravel directly in the route or on route groups to be used by all routes under it.
+
+#### Route Group Middleware
+
+To add middleware to the route group, return it from the `middleware()` function:
+
+```php
+public static function middleware(): array
+{
+    return [
+        Authenticate::class,
+        'throttle:30,1',
+    ];
+}
+```
+
+#### Specific Route Middleware
+
+If you need to add middleware to a single Route, you can pass the `middleware` param on the `Route` attribute:
+
+```php
+#[Route(method: 'PUT', uri: '/post/{id}', middleware: ['can:update,post'])]
+```
+
+### Multiple Routes
+
+If for some reason you need a controller to respond to multiple URIs, you can stack as many Routes as needed:
+
+```php
+#[Route(method: 'GET', uri: '/user', group: ApiRouteGroup::class)]
+#[Route(method: 'GET', uri: '/users', group: ApiRouteGroup::class)]
+public function show(int $id): View
+```
+
+This will make `/user` and `/users` have the same behaviour.
+
+### Route Caching
+
+Laravel's route caching is fully supported so you can keep using `php artisan route:cache` as you were.
+
+## Artisan Commands
+
+### Generate Route Groups
+
+You can easily create a route group using the `make:route-group` Artisan command:
 
 ```bash
-php artisan make:route-group --name Web --namespace=App\\Http --no-interaction
-#   INFO  RouteGroup [app/Http/WebRouteGroup.php] created successfully.  
+php artisan make:route-group {name} {prefix}
 ```
 
-Then using the route group you've just created, you can add routes to it in a completely different namespace, like so:
+Let's say we want to create an API route group:
 
 ```bash
-php artisan make:route --group=App\\Http\\WebRouteGroup --namespace=App\\Domain\\Auth\\Http --name=Register --uri=/auth/register --method=POST
-#   INFO  Route [app/Domain/Auth/Http/Register.php] created successfully. 
+php artisan make:route-group ApiRouteGroup /api
+# INFO  Route Group [app/Http/Routes/ApiRouteGroup.php] created successfully.
 ```
 
-There's really no limitations on how you choose to structure your application.
+Here's how the generated class would look like:
 
-### Changing the base Route
+```php
+namespace App\Http\Routes;
 
-By default, all generated routes extend `MicaelDias\SingleFileRoutes\Routing\Route` which include both `AuthorizesRequests` and `ValidatesRequests` traits from Laravel. If you prefer, you can have all your routes extend a custom class to add functionality that's available on all your routes. 
+use MicaelDias\SingleFileRoutes\Routing\RouteGroup;
 
-To do so, update the 'route-class' value found on `config/single-file-routes.php`. 
+class ApiRouteGroup implements RouteGroup
+{
+    /**
+     * {@inheritdoc}
+     */
+    public static function prefix(): string
+    {
+        return '/api';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function middleware(): array
+    {
+        return [];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function domain(): ?string
+    {
+        return null;
+    }
+}
+```
+
+### Generate Routes
+
+We only support generating single action controllers using the `make:route` command. 
+
+Follow the prompts to generate the desired route:
+
+```bash
+php artisan make:route
+```
+
+![](assets/make-route.gif)
+
+Here's how the generated class would look like:
+
+```php
+namespace App\Http\Routes\Api\User;
+
+use Illuminate\Http\Request;
+use MicaelDias\SingleFileRoutes\Routing\Route;
+use App\Http\Routes\ApiRouteGroup;
+
+#[Route(method: 'GET', uri: '/user', group: ApiRouteGroup::class)]
+class Get
+{
+    /**
+     * Handle the request.
+     */
+    public function __invoke(Request $request)
+    {
+        // @todo handle request
+    }
+}
+```
 
 Keep in mind that the route generators were created for your convenience, but you're of course free to manually create routes or groups if it's simpler for your use-case.
 

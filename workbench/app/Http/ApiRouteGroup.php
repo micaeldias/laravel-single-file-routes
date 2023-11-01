@@ -1,17 +1,17 @@
 <?php
 
-namespace {{ namespace }};
+namespace Workbench\App\Http;
 
 use MicaelDias\SingleFileRoutes\Routing\RouteGroup;
 
-class {{ class }} implements RouteGroup
+class ApiRouteGroup implements RouteGroup
 {
     /**
      * {@inheritdoc}
      */
     public static function prefix(): string
     {
-        return '{{ prefix }}';
+        return "/api";
     }
 
     /**

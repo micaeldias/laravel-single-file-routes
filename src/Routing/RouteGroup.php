@@ -2,24 +2,22 @@
 
 namespace MicaelDias\SingleFileRoutes\Routing;
 
-abstract class RouteGroup
+interface RouteGroup
 {
     /**
      * The URI prefix for all routes on this group.
      */
-    public static string $prefix = '';
+    public static function prefix(): string;
 
     /**
      * The middleware used for all routes on this group.
      *
-     *  @var string[]
+     *  @return  string[]
      */
-    public static array $middleware = [];
+    public static function middleware(): array;
 
     /**
-     * The routes belonging to this group.
-     *
-     *  @var Route[]|string[]
+     * Assign this route group to a subdomain.
      */
-    public static array $routes = [];
+    public static function domain(): ?string;
 }

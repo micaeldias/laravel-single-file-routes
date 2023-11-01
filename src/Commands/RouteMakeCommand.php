@@ -57,7 +57,6 @@ class RouteMakeCommand extends GeneratorCommand
         }
 
         $this->decorateStub();
-        $this->registerRouteToGroup();
 
         return null;
     }
@@ -100,20 +99,14 @@ class RouteMakeCommand extends GeneratorCommand
         if (is_null($group)) {
             $groups = $this->getRouteGroupClasses();
 
-            if (empty($groups)) {
-                throw new \Exception(
-                    'You need to have at least one route group before creating '.
-                    'routes. Did you run php artisan make:route-group?'
-                );
-            }
-
             $group = select(
-                'What route group should this route be under?',
-                $groups
+                label: 'What route group should this route be under?',
+                options: ['None', ...$groups],
+                default: 'None',
             );
         }
 
-        $input->setOption('group', $group);
+        $input->setOption('group', $group !== 'None' ? $group : null);
     }
 
     protected function determineMethod(InputInterface &$input): void
@@ -135,8 +128,10 @@ class RouteMakeCommand extends GeneratorCommand
         $uri = $input->getOption('uri');
 
         if (is_null($uri)) {
+            /** @var RouteGroup|string|null $group */
             $group = $input->getOption('group');
-            $prefix = $group::$prefix;
+
+            $prefix = $group ? $group::prefix() : null;
 
             $uri = text(
                 'What URI should this route respond to?',
@@ -162,9 +157,24 @@ class RouteMakeCommand extends GeneratorCommand
             return;
         }
 
-        $groupReflection = new ReflectionClass($input->getOption('group'));
+        $routesNamespace = config('single-file-routes.routes-namespace');
 
-        $uri = Str::replaceStart('/', '', $input->getOption('uri'));
+        if (! config('single-file-routes.generate-from-uri')) {
+            $input->setOption('namespace', $routesNamespace);
+
+            return;
+        }
+
+        /** @var RouteGroup|string|null $group */
+        $group = $input->getOption('group');
+
+        if ($group) {
+            $fullUri = $group::prefix() . Str::start($input->getOption('uri'), '/');
+        } else {
+            $fullUri = $input->getOption('uri');
+        }
+
+        $uri = Str::replaceStart('/', '', $fullUri);
 
         $uriToNamespace = collect(explode('/', $uri))
             ->filter(function ($part) {
@@ -183,17 +193,18 @@ class RouteMakeCommand extends GeneratorCommand
             })
             ->implode('\\');
 
-        $input->setOption('namespace', $groupReflection->getNamespaceName().'\\'.$uriToNamespace);
+        $input->setOption('namespace', $routesNamespace . "\\" . $uriToNamespace);
     }
 
     protected function determineName(InputInterface &$input): void
     {
-        $namespace = $input->getOption('namespace').'\\';
         $name = $input->getOption('name');
 
         if ($name) {
             return;
         }
+
+        $namespace = $input->getOption('namespace').'\\';
 
         $name = text(
             'Where should this route be placed?',
@@ -201,7 +212,7 @@ class RouteMakeCommand extends GeneratorCommand
             $namespace,
             true,
             null,
-            'E.g. Index, Get, SignIn, etc'
+            'E.g. App\\Http\\Routes\\User\\Get'
         );
 
         $input->setOption('namespace', Str::beforeLast($name, '\\'));
@@ -235,7 +246,9 @@ class RouteMakeCommand extends GeneratorCommand
 
     protected function decorateOptions(): ?string
     {
-        if (! is_subclass_of($this->option('group'), RouteGroup::class)) {
+        $group = $this->option('group');
+
+        if ($group && ! is_subclass_of($this->option('group'), RouteGroup::class)) {
             return 'Invalid route group provided.';
         }
 
@@ -264,21 +277,28 @@ class RouteMakeCommand extends GeneratorCommand
         $path = $this->getPath($name);
         $stub = $this->files->get($path);
 
-        /** @var RouteGroup|string $groupFQN */
+        /** @var RouteGroup|string|null $groupFQN */
         $groupFQN = $this->option('group');
-        $group = Str::afterLast($groupFQN, '\\');
+
         $uri = $this->option('uri');
 
-        $extraArgs = Str::matchAll("/({\w+})/", $groupFQN::$prefix.$uri)
+        if ($groupFQN) {
+            $group = Str::afterLast($groupFQN, '\\');
+
+            $fullUri = $groupFQN::prefix().$uri;
+            $groupFQN = "\nuse {$groupFQN};";
+            $group =  ", group: {$group}::class";
+        } else {
+            $fullUri = $uri;
+            $groupFQN = "";
+            $group = "";
+        }
+
+        $extraArgs = Str::matchAll("/({\w+})/", $fullUri)
             ->map(function ($arg) {
                 return '$'.Str::replace(['{', '}'], '', $arg);
             })
             ->toArray();
-
-        $baseRouteFQN = config('single-file-routes.route-class');
-
-        $stub = str_replace('{{ baseRouteFQN }}', $baseRouteFQN, $stub);
-        $stub = str_replace('{{ baseRoute }}', Str::afterLast($baseRouteFQN, '\\'), $stub);
 
         $stub = str_replace('{{ groupFQN }}', $groupFQN, $stub);
         $stub = str_replace('{{ group }}', $group, $stub);
@@ -291,30 +311,6 @@ class RouteMakeCommand extends GeneratorCommand
         );
 
         $this->files->put($path, $stub);
-    }
-
-    /**
-     * @throws \ReflectionException
-     */
-    protected function registerRouteToGroup(): void
-    {
-        $groupReflection = new ReflectionClass($this->option('group'));
-        $class = $this->option('name');
-
-        $path = $groupReflection->getFileName();
-        $contents = file_get_contents($path);
-        $search = 'public static array $routes = [';
-        $suffix = Str::contains($contents, 'public static array $routes = []') ? PHP_EOL.'    ' : '';
-
-        if (Str::contains($contents, "{$class}::class")) {
-            return;
-        }
-
-        file_put_contents($path, str_replace(
-            $search,
-            $search.PHP_EOL.'        \\'."{$class}::class,".$suffix,
-            $contents
-        ));
     }
 
     /**

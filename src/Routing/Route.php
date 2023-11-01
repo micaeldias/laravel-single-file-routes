@@ -2,27 +2,19 @@
 
 namespace MicaelDias\SingleFileRoutes\Routing;
 
-use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
-use Illuminate\Foundation\Validation\ValidatesRequests;
+use Attribute;
 
-abstract class Route
+#[Attribute(Attribute::TARGET_CLASS | Attribute::TARGET_METHOD | Attribute::IS_REPEATABLE)]
+class Route
 {
-    use AuthorizesRequests, ValidatesRequests;
+    public function __construct(
+        public string $method,
+        public string $uri,
+        public ?string $name = null,
+        public ?string $group = null,
+        public array $middleware = []
+    )
+    {
 
-    /**
-     * The HTTP method of the request.
-     */
-    public static string $method;
-
-    /**
-     * The URI of the request.
-     */
-    public static string $uri;
-
-    /**
-     * Add middleware to the request.
-     *
-     *  @var string[]
-     */
-    public static array $middleware = [];
+    }
 }

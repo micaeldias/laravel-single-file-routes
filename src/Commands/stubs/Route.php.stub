@@ -3,29 +3,11 @@
 namespace {{ namespace }};
 
 use Illuminate\Http\Request;
-use {{ baseRouteFQN }};
-use {{ groupFQN }};
+use MicaelDias\SingleFileRoutes\Routing\Route;{{ groupFQN }}
 
-/**
- * @uses {{ group }}
- */
-class {{ class }} extends {{ baseRoute }}
+#[Route(method: '{{ method }}', uri: '{{ uri }}'{{ group }})]
+class {{ class }}
 {
-    /**
-     * {@inheritdoc}
-     */
-    public static string $method = '{{ method }}';
-
-    /**
-     * {@inheritdoc}
-     */
-    public static string $uri = '{{ uri }}';
-
-    /**
-     * {@inheritdoc}
-     */
-    public static array $middleware = [];
-
     /**
      * Handle the request.
      */

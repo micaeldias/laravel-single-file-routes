@@ -5,24 +5,11 @@ namespace Workbench\App\Http\Api\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use MicaelDias\SingleFileRoutes\Routing\Route;
+use Workbench\App\Http\ApiRouteGroup;
 
-class Get extends Route
+#[Route(group: ApiRouteGroup::class, method: 'GET', uri: '/user/{id}')]
+class Get
 {
-    /**
-     * {@inheritdoc}
-     */
-    public static string $method = 'GET';
-
-    /**
-     * {@inheritdoc}
-     */
-    public static string $uri = '/user/{id}';
-
-    /**
-     * {@inheritdoc}
-     */
-    public static array $middleware = [];
-
     /**
      * Handle the request.
      */
